@@ -112,6 +112,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { countModule } from "@/store/count";
+
+console.log(countModule.count);
+countModule.INCREMENT();
+console.log(countModule.count);
 
 @Options({
   props: {
