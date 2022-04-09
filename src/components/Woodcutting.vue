@@ -1,32 +1,41 @@
 <template>
-  <h1>Woodcutting</h1>
-  <div>
+  <Tile>
+    <h1>Woodcutting</h1>
+    <ProgressBar :label="xpBarLabel" :percentage="xpPercentage" />
+    <img alt="Wood" src="../assets/woodcutting.png" />
     <p>Current Level: {{ currentLevel }}</p>
+    <p>Current Inventory: {{ woodCount }}</p>
     <p>Skilling since: {{ skillingFor }}</p>
     <button @click="toggleTraining">
       {{ isActive ? "Stop Training" : "Start Training" }}
     </button>
-    <ProgressBar :percentage="xpPercentage" />
-  </div>
+    <ProgressBar :percentage="harvestPercentage" />
+  </Tile>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { skill_woodcutting } from "@/store/store-accessor";
+import { skill_woodcutting, inventory, InventoryItems } from "@/store/store-accessor";
 import ProgressBar from "./ProgressBar.vue";
-
+import Tile from "./Tile.vue";
 @Options({
   props: {
 
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    Tile
   }
 })
 export default class Woodcutting extends Vue {
   skillingForMessage: string = '';
   trainingIntervalId: number | undefined;
   xpPercentage: number = 0;
+  harvestPercentage: number = 0;
+
+  get xpBarLabel(): string {
+    return `${this.xpPercentage}%`
+  }
 
   get currentLevel(): number {
     return skill_woodcutting.currentLevel;
@@ -40,15 +49,32 @@ export default class Woodcutting extends Vue {
     return skill_woodcutting.isActive;
   }
 
-  updateState() {
-    if (this.isActive) {
-      let newXp = this.xpPercentage + 1;
-      if (newXp > 100) {
+  get woodCount(): number {
+    return inventory.fullInventory.get(InventoryItems.Wood) || 0;
+  }
+
+  increaseXp() {
+      let newXp = this.xpPercentage + 10;
+      if (newXp >= 100) {
         skill_woodcutting.increaseLevel();
         newXp = newXp - 100;
       }
       this.xpPercentage = newXp;
-      console.log("Hey", this.xpPercentage);
+  }
+
+  increaseHarvest() {
+    let newHarvestPercentage = this.harvestPercentage + 1;
+    if (newHarvestPercentage >= 100) {
+      inventory.increseInventory(InventoryItems.Wood);
+      this.increaseXp();
+      newHarvestPercentage = newHarvestPercentage - 100;
+    }
+    this.harvestPercentage = newHarvestPercentage;
+  }
+
+  updateState() {
+    if (this.isActive) {
+      this.increaseHarvest();
     }
     this.setSkillingForMessage();
   }

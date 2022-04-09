@@ -1,6 +1,8 @@
 
 <template>
     <div class="container">
+        {{ label }}
+        <div v-if="label">{{ label }}</div>
         <div class="progress-bar">
             <div class="progress-bar__inner" :style="{width: percentage+'%'}"></div>
         </div>
@@ -12,23 +14,22 @@ import { Vue, Options } from 'vue-class-component';
 
 @Options({
   props: {
-      percentage: Number
+      percentage: Number,
+      label: String
   }
 })
 export default class ProgressBar extends Vue {
     percentage!: number;
+    label?: string;
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .container {
-        width: 100px;
-        margin: 10px;
-        height: 10px;
         .progress-bar {
             outline: 1px solid black;
-            height: 100%;
+            height: 10px;
             width: 100%;
             
             &__inner {
