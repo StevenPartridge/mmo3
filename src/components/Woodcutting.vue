@@ -1,6 +1,17 @@
 <template>
+  <Modal
+    v-if="modalIsOpen"
+    @close="toggleModal">
+    <div class="modal-content">
+      <h3>Select Item:</h3>
+      <select label="Select Tier" @change="setSelectedTier">
+        <option v-for="tier of tierOptions" :value="tier.code">{{ tier.label }}</option>
+      </select>
+    </div>
+  </Modal>
   <Tile class="contianer">
-    <h1>Woodcutting</h1>
+    <h2>Woodcutting</h2>
+    <button @click="toggleModal">Select Tier</button>
     <ProgressBar :label="xpBarLabel" :percentage="xpPercentage" />
     <img alt="Wood" src="../assets/woodcutting.png" />
     <p>Current Level: {{ currentLevel }}</p>
@@ -15,8 +26,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { skill_woodcutting, inventory, InventoryItems } from "@/store/store-accessor";
+import { skill_woodcutting, inventory, InventoryItems, SkillTiersWoodcutting } from "@/store/store-accessor";
 import ProgressBar from "./ProgressBar.vue";
+import Modal, { ModalEvents } from "./Modal.vue";
 import Tile from "./Tile.vue";
 @Options({
   props: {
@@ -24,7 +36,8 @@ import Tile from "./Tile.vue";
   },
   components: {
     ProgressBar,
-    Tile
+    Tile,
+    Modal
   }
 })
 export default class Woodcutting extends Vue {
@@ -32,6 +45,13 @@ export default class Woodcutting extends Vue {
   trainingIntervalId: number | undefined;
   xpPercentage: number = 0;
   harvestPercentage: number = 0;
+  modalOpen: boolean = false;
+  selectedTier: SkillTiersWoodcutting = SkillTiersWoodcutting.OAK;
+  modalEvents = ModalEvents;
+
+  get modalIsOpen(): boolean {
+    return this.modalOpen;
+  }
 
   get xpBarLabel(): string {
     return `${this.xpPercentage}%`
@@ -51,6 +71,34 @@ export default class Woodcutting extends Vue {
 
   get woodCount(): number {
     return inventory.fullInventory.get(InventoryItems.Wood) || 0;
+  }
+
+  get tierOptions(): Record<string, any>[] {
+    return [{
+      label: 'Tier 1 - Wood',
+      code: SkillTiersWoodcutting.WOOD
+    }, {
+      label: 'Tier 2 - Oak',
+      code: SkillTiersWoodcutting.OAK
+    }, {
+      label: 'Tier 3 - Willow',
+      code: SkillTiersWoodcutting.WILLOW
+    }, {
+      label: 'Tier 4 - Ebody',
+      code: SkillTiersWoodcutting.EBONY
+    }];
+    const demo = [{label: 'Canada', code: 'ca'}];
+  }
+
+  setSelectedTier(tier: any) {
+    console.log(tier.target.value);
+    this.selectedTier = tier.target.value;
+  }
+
+  toggleModal() {
+    console.log("Opening Modal");
+    console.log(this.modalIsOpen);
+    this.modalOpen = !this.modalOpen;
   }
 
   increaseXp() {
@@ -86,6 +134,7 @@ export default class Woodcutting extends Vue {
   toggleTraining(): void {
     if (this.isActive) {
       skill_woodcutting.stopSkilling();
+      this.harvestPercentage = 0;
     } else {
       skill_woodcutting.startSkilling();
     }
@@ -105,7 +154,18 @@ export default class Woodcutting extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
+  .modal-content {
+    display: flex;
+    padding: 20px;
+  }
   .container {
+      h2 {
+          margin: 5px 0;
+          text-decoration: underline;
+          font-weight: bold;
+          size: 150%;
+      }
       * {
           display: block;
           max-width: 100%;

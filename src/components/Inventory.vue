@@ -57,6 +57,9 @@ export default class ProgressBar extends Vue {
 
         h2 {
             margin: 5px 0;
+            text-decoration: underline;
+            font-weight: bold;
+            size: 150%;
         }
         .container {
 

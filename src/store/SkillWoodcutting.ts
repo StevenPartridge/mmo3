@@ -11,7 +11,12 @@ import {
 import { formatDistance } from "date-fns";
 import store from ".";
 
-console.log(store);
+export enum SkillTiersWoodcutting {
+  WOOD = 'wood',
+  OAK = 'oak',
+  WILLOW = 'willow',
+  EBONY = 'ebony'
+}
 
 @Module({ dynamic: true, namespaced: true, store, name: "SkillWoodcutting" })
 class SkillWoodcutting extends VuexModule {
