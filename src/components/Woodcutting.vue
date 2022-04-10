@@ -5,15 +5,21 @@
     <div class="modal-content">
       <h3>Select Item:</h3>
       <select label="Select Tier" @change="setSelectedTier">
-        <option v-for="tier of tierOptions" :value="tier.code">{{ tier.label }}</option>
+        <option
+          v-for="tier of skillDefinition"
+          :disabled="tier.level >= currentLevel"
+          :value="tier.code">
+            {{ tier.label }}
+        </option>
       </select>
+      <p>{{selectedTier.description}}</p>
     </div>
   </Modal>
   <Tile class="contianer">
     <h2>Woodcutting</h2>
     <button @click="toggleModal">Select Tier</button>
     <ProgressBar :label="xpBarLabel" :percentage="xpPercentage" />
-    <img alt="Wood" src="../assets/woodcutting.png" />
+    <img alt="Wood" :src="selectedTier.image" />
     <p>Current Level: {{ currentLevel }}</p>
     <p>Current Inventory: {{ woodCount }}</p>
     <p>Skilling since: {{ skillingFor }}</p>
@@ -30,6 +36,16 @@ import { skill_woodcutting, inventory, InventoryItems, SkillTiersWoodcutting } f
 import ProgressBar from "./ProgressBar.vue";
 import Modal, { ModalEvents } from "./Modal.vue";
 import Tile from "./Tile.vue";
+
+type TierOption = {
+  label: string,
+  code: SkillTiersWoodcutting,
+  level: number,
+  description: string,
+  sku: InventoryItems,
+  image: any
+}
+
 @Options({
   props: {
 
@@ -46,15 +62,54 @@ export default class Woodcutting extends Vue {
   xpPercentage: number = 0;
   harvestPercentage: number = 0;
   modalOpen: boolean = false;
-  selectedTier: SkillTiersWoodcutting = SkillTiersWoodcutting.OAK;
+  tierOptions: Record<SkillTiersWoodcutting, TierOption> = {
+    [SkillTiersWoodcutting.WOOD]: {
+      label: 'Tier 1 - Wood',
+      code: SkillTiersWoodcutting.WOOD,
+      level: 0,
+      description: "Beginner woocutting activities, collecting twigs and dry moss, try not to get a splinter!",
+      sku: InventoryItems.WOOD_WOOD,
+      image: require('../assets/woodcutting_wood.png')
+    },
+    [SkillTiersWoodcutting.OAK]: {
+      label: 'Tier 2 - Oak',
+      code: SkillTiersWoodcutting.OAK,
+      level: 1,
+      description: "Things are picking up, you may get a hatchet soon!",
+      sku: InventoryItems.WOOD_OAK,
+      image: require('../assets/woodcutting_wood.png')
+    },
+    [SkillTiersWoodcutting.WILLOW]: {
+      label: 'Tier 3 - Willow',
+      code: SkillTiersWoodcutting.WILLOW,
+      level: 20,
+      description: "You've tought some trees who's boss, let's keep choppin' an see how far you can go!",
+      sku: InventoryItems.WOOD_WILLOW,
+      image: require('../assets/woodcutting_wood.png')
+    },
+    [SkillTiersWoodcutting.EBONY]: {
+      label: 'Tier 4 - Ebody',
+      code: SkillTiersWoodcutting.EBONY,
+      level: 30,
+      description: "This strong dense wood is worth a pretty penny, let's get rich!",
+      sku: InventoryItems.WOOD_EBONY,
+      image: require('../assets/woodcutting_wood.png')
+    }
+  };
+  selectedTier: TierOption = this.tierOptions[SkillTiersWoodcutting.WOOD];
   modalEvents = ModalEvents;
+
+
+  get skillDefinition(): Record<SkillTiersWoodcutting, TierOption> {
+    return this.tierOptions;
+  }
 
   get modalIsOpen(): boolean {
     return this.modalOpen;
   }
 
   get xpBarLabel(): string {
-    return `${this.xpPercentage}%`
+    return `${this.xpPercentage}%`;
   }
 
   get currentLevel(): number {
@@ -70,29 +125,13 @@ export default class Woodcutting extends Vue {
   }
 
   get woodCount(): number {
-    return inventory.fullInventory.get(InventoryItems.Wood) || 0;
+    return inventory.fullInventory.get(this.selectedTier.sku) || 0;
   }
 
-  get tierOptions(): Record<string, any>[] {
-    return [{
-      label: 'Tier 1 - Wood',
-      code: SkillTiersWoodcutting.WOOD
-    }, {
-      label: 'Tier 2 - Oak',
-      code: SkillTiersWoodcutting.OAK
-    }, {
-      label: 'Tier 3 - Willow',
-      code: SkillTiersWoodcutting.WILLOW
-    }, {
-      label: 'Tier 4 - Ebody',
-      code: SkillTiersWoodcutting.EBONY
-    }];
-    const demo = [{label: 'Canada', code: 'ca'}];
-  }
-
-  setSelectedTier(tier: any) {
-    console.log(tier.target.value);
-    this.selectedTier = tier.target.value;
+  setSelectedTier(tier: Record<string, any>) {
+    const newTier = tier.target.value as SkillTiersWoodcutting;
+    console.log(newTier);
+    this.selectedTier = this.tierOptions[newTier];
   }
 
   toggleModal() {
@@ -113,7 +152,7 @@ export default class Woodcutting extends Vue {
   increaseHarvest() {
     let newHarvestPercentage = this.harvestPercentage + 1;
     if (newHarvestPercentage >= 100) {
-      inventory.increseInventory(InventoryItems.Wood);
+      inventory.increseInventory(this.selectedTier.sku);
       this.increaseXp();
       newHarvestPercentage = newHarvestPercentage - 100;
     }

@@ -4,8 +4,8 @@
         <h2>Inventory</h2>
         <div class="container">
             <Tile v-for="item in inventoryItems" class="inventory__item">
-                <img src="@/assets/woodcutting.png" :alt="item.key">
-                <p>{{ item.key }}</p>
+                <img :src="item.image" :alt="item.key">
+                <p>{{ item.key.split('_').join(' ') }}</p>
                 <p>{{ item.value}}</p>
             </Tile>
         </div>
@@ -18,8 +18,9 @@ import { inventory, InventoryItems } from '@/store/Inventory';
 import Tile from './Tile.vue';
 
 type InventoryItem = {
-    key: string,
-    value: number
+    key: InventoryItems,
+    value: number,
+    image: any
 }
 
 @Options({
@@ -33,10 +34,13 @@ export default class ProgressBar extends Vue {
 
     get inventoryItems(): InventoryItem[] {
         const items: InventoryItem[] = [];
+        console.log(inventory.fullInventory);
         inventory.fullInventory.forEach((val, key) => {
+            console.log(key)
             items.push({
-                key: InventoryItems[key],
-                value: val
+                key,
+                value: val,
+                image: require(`@/assets/${key}.png`)
             })
         });
         return items;
@@ -62,6 +66,8 @@ export default class ProgressBar extends Vue {
             size: 150%;
         }
         .container {
+            display: flex;
+            flex-direction: row;
 
             .inventory__item {
                 display: flex;
