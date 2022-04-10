@@ -2,7 +2,7 @@
 <template>
     <div class="container">
         <slot>
-            Skill Goes Here
+            Content Goes Here
         </slot>
     </div>
 </template>
@@ -26,11 +26,5 @@ export default class Tile extends Vue {
         height: auto;
         display: flex;
         flex-direction: column;
-
-    }
-    .container > * {
-        display: block;
-        margin: 0 5px;
-        outline: 1px solid red;
     }
 </style>

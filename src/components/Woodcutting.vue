@@ -1,5 +1,5 @@
 <template>
-  <Tile>
+  <Tile class="contianer">
     <h1>Woodcutting</h1>
     <ProgressBar :label="xpBarLabel" :percentage="xpPercentage" />
     <img alt="Wood" src="../assets/woodcutting.png" />
@@ -104,4 +104,12 @@ export default class Woodcutting extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .container {
+      * {
+          display: block;
+          max-width: 100%;
+          margin-top: 5px;
+      }
+  }
+</style>

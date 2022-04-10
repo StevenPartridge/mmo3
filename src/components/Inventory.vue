@@ -1,11 +1,14 @@
 
 <template>
-    <div class="container">
-        <Tile v-for="item in inventoryItems">
-            <img src="@/assets/woodcutting.png" :alt="item.key">
-            <p>{{ item.key }}</p>
-            <p>{{ item.value}}</p>
-        </Tile>
+    <div class="inventory">
+        <h2>Inventory</h2>
+        <div class="container">
+            <Tile v-for="item in inventoryItems" class="inventory__item">
+                <img src="@/assets/woodcutting.png" :alt="item.key">
+                <p>{{ item.key }}</p>
+                <p>{{ item.value}}</p>
+            </Tile>
+        </div>
     </div>
 </template>
 
@@ -43,16 +46,31 @@ export default class ProgressBar extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .container {
-        .progress-bar {
-            outline: 1px solid black;
-            height: 10px;
-            width: 100%;
-            
-            &__inner {
-                width: 100%;
-                height: 100%;
-                background-color: blue;
+
+    .inventory {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        outline: 1px solid black;
+        padding: 5px;
+        margin-top: 15px;
+
+        h2 {
+            margin: 5px 0;
+        }
+        .container {
+
+            .inventory__item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100px;
+
+                * {
+                    display: block;
+                    max-width: 100%;
+                    margin-top: 5px;
+                }
             }
         }
     }

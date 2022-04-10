@@ -1,7 +1,6 @@
 
 <template>
     <div class="container">
-        {{ label }}
         <div v-if="label">{{ label }}</div>
         <div class="progress-bar">
             <div class="progress-bar__inner" :style="{width: percentage+'%'}"></div>
