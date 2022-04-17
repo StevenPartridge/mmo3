@@ -20,7 +20,7 @@ export enum SkillTiersWoodcutting {
 
 @Module({ dynamic: true, namespaced: true, store, name: "SkillWoodcutting" })
 class SkillWoodcutting extends VuexModule {
-  _level = 1;
+  _level = 55;
   _skillActive = false;
   _skillActiveTime: Date | null = null;
 

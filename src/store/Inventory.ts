@@ -15,8 +15,8 @@
       WOOD_WOOD = 'woodcutting_wood',
       WOOD_OAK = 'woodcutting_oak',
       WOOD_WILLOW = 'woodcutting_willow',
-      WOOD_EBONY = 'woodcutting_ebony'
-      
+      WOOD_EBONY = 'woodcutting_ebony',
+      ETC_HEART = 'etc_heart'
   }
   
   export type Inventory = Map<InventoryItems, number>;

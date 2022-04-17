@@ -55,7 +55,6 @@ export default class ProgressBar extends Vue {
         align-items: flex-start;
         outline: 1px solid black;
         padding: 5px;
-        margin-top: 15px;
 
         h2 {
             margin: 5px 0;
