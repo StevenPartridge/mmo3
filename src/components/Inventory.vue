@@ -74,6 +74,7 @@ export default class ProgressBar extends Vue {
                 flex-direction: column;
                 align-items: center;
                 width: 100px;
+                margin-right: 10px;
 
                 * {
                     display: block;

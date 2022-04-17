@@ -7,6 +7,7 @@
       <select label="Select Tier" @change="setSelectedTier">
         <option
           v-for="tier of skillDefinition"
+          :selected="tier.code === selectedTier.code"
           :disabled="tier.level >= currentLevel"
           :value="tier.code">
             {{ tier.label }}
@@ -77,23 +78,23 @@ export default class Woodcutting extends Vue {
       level: 1,
       description: "Things are picking up, you may get a hatchet soon!",
       sku: InventoryItems.WOOD_OAK,
-      image: require('../assets/woodcutting_wood.png')
+      image: require('../assets/woodcutting_oak.png')
     },
     [SkillTiersWoodcutting.WILLOW]: {
       label: 'Tier 3 - Willow',
       code: SkillTiersWoodcutting.WILLOW,
-      level: 20,
+      level: 2,
       description: "You've tought some trees who's boss, let's keep choppin' an see how far you can go!",
       sku: InventoryItems.WOOD_WILLOW,
-      image: require('../assets/woodcutting_wood.png')
+      image: require('../assets/woodcutting_willow.png')
     },
     [SkillTiersWoodcutting.EBONY]: {
-      label: 'Tier 4 - Ebody',
+      label: 'Tier 4 - Ebony',
       code: SkillTiersWoodcutting.EBONY,
-      level: 30,
+      level: 3,
       description: "This strong dense wood is worth a pretty penny, let's get rich!",
       sku: InventoryItems.WOOD_EBONY,
-      image: require('../assets/woodcutting_wood.png')
+      image: require('../assets/woodcutting_ebony.png')
     }
   };
   selectedTier: TierOption = this.tierOptions[SkillTiersWoodcutting.WOOD];

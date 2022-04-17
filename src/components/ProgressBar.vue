@@ -32,7 +32,6 @@ export default class ProgressBar extends Vue {
             width: 100%;
             
             &__inner {
-                width: 100%;
                 height: 100%;
                 background-color: blue;
             }
