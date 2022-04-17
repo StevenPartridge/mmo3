@@ -34,9 +34,7 @@ export default class ProgressBar extends Vue {
 
     get inventoryItems(): InventoryItem[] {
         const items: InventoryItem[] = [];
-        console.log(inventory.fullInventory);
         inventory.fullInventory.forEach((val, key) => {
-            console.log(key)
             items.push({
                 key,
                 value: val,
